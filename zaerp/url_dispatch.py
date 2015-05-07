@@ -2,6 +2,7 @@ __author__ = 'evren kutar'
 # from zdispatch.dispatcher import app
 from lib.views import SimpleView
 import falcon
+import json
 
 app = falcon.API()
 
@@ -16,6 +17,7 @@ class LoginView():
 
     def on_get(self, req, resp):
         print req.context
+        resp.content_type = 'Content-Type: application/json'
         try:
             if req.context.get('cmd', '') == 'do':
                 self._do(resp)
@@ -23,7 +25,7 @@ class LoginView():
                 self._show(resp)
         except:
 
-            self._do(resp)
+            self._show(resp)
 
     def _do(self, resp):
         resp.status = falcon.HTTP_200
@@ -32,7 +34,7 @@ class LoginView():
 
     def _show(self, resp):
         resp.status = falcon.HTTP_200
-        resp.body = ('this is show func')
+        resp.body = (json.dumps({'form': 'test'})) # TODO: how to return json objects?
         return resp
 
 
