@@ -18,13 +18,13 @@ class LoginView():
     def on_get(self, req, resp):
         print req.context
         resp.content_type = 'Content-Type: application/json'
+        resp.set_header('Access-Control-Allow-Origin', '*')
         try:
             if req.context.get('cmd', '') == 'do':
                 self._do(resp)
             else:
                 self._show(resp)
         except:
-
             self._show(resp)
 
     def _do(self, resp):
@@ -34,7 +34,7 @@ class LoginView():
 
     def _show(self, resp):
         resp.status = falcon.HTTP_200
-        resp.body = (json.dumps({'form': 'test'})) # TODO: how to return json objects?
+        resp.body = (json.dumps({'id': 1, 'user': {'id': 12, 'role': 'admin'}})) # TODO: how to return json objects?
         return resp
 
 
