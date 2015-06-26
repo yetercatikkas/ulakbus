@@ -32,10 +32,13 @@ class JSONTranslator(object):
         # and allows you to read bytes from the request body.
         #
         # See also: PEP 3333
+
+        # initialize context.data and context.result here to take effect
+        req.context['data'] = {}
+        req.context['result'] = {}
+
         if req.content_length in (None, 0):
             # Nothing to do
-            req.context['data'] = {}
-            req.context['result'] = {}
             return
 
         body = req.stream.read()
