@@ -27,11 +27,11 @@ SESSION_OPTIONS = {
 ENABLED_MIDDLEWARES = [
     middlewares.RequireJSON(),
     middlewares.JSONTranslator(),
-    middlewares.SessionMiddleware(),
+    # middlewares.SessionMiddleware(),
 ]
 
-class ZRequest(falcon.Request):
-    context_type = DotDict
+# class ZRequest(falcon.Request):
+#     context_type = DotDict
 
-falcon_app = falcon.API(middleware=ENABLED_MIDDLEWARES, request_type=ZRequest)
-app = SessionMiddleware(falcon_app, SESSION_OPTIONS)
+falcon_app = falcon.API(middleware=ENABLED_MIDDLEWARES)
+app = SessionMiddleware(falcon_app, SESSION_OPTIONS, environ_key="session")
