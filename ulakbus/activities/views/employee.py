@@ -29,9 +29,9 @@ class Edit(SimpleView):
     def _show(self):
         if self.current['request'].context['data'].get('object_id'):
             employee_id = self.current['request'].context['data']['object_id']
-            serialized_form = AngularForm(Employee.objects.get(employee_id), types={"birth_date": "string"}, list_nodes = True).serialize()
+            serialized_form = AngularForm(Employee.objects.get(employee_id), types={"birth_date": "string"}, list_nodes=True).serialize()
         else:
-            serialized_form = AngularForm(Employee(), types={"birth_date": "string"}, list_nodes = True).serialize()
+            serialized_form = AngularForm(Employee(), types={"birth_date": "string"}, list_nodes=True).serialize()
         self.current['request'].context['result']['forms'] = serialized_form
 
 
