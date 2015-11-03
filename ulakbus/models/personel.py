@@ -19,7 +19,7 @@ class Personel(Model):
     dogum_tarihi = field.Date("Doğum Tarihi", index=True, format="%d.%m.%Y")
     dogum_yeri = field.String("Doğum Yeri", index=True)
     uyruk = field.String("Uyruk", index=True)
-    medeni_hali = field.String("Medeni Hali", index=True)
+    medeni_hali = field.Integer("Medeni Hali", index=True, choices=medeni_hali)
     ikamet_adresi = field.String("İkamet Adresi", index=True)
     oda_no = field.Integer("Oda Numarası", index=True)
     oda_tel_no = field.String("Oda Telefon Numarası", index=True)
@@ -31,7 +31,7 @@ class Personel(Model):
     kan_grubu = field.String("Kan Grubu", index=True)
     ehliyet = field.String("Ehliyet", index=True)
     verdigi_dersler = field.String("Verdiği Dersler", index=True)
-    unvan = field.String("Unvan", index=True)
+    unvan = field.Integer("Unvan", index=True, choices=akademik_unvan)
 
     class Meta:
         app = 'Personel'
@@ -60,7 +60,7 @@ class Personel(Model):
         memuriyet_baslama_tarihi = field.Date("Memuriyete Ilk Baslama Tarihi", index=True,
                                               format="%d.%m.%Y")
         kurum_sicil = field.String("Kurum Sicili", index=True)
-        maluliyet_kod = field.Integer("Malul Kod", index=True)
+        maluliyet_kod = field.Integer("Malul Kod", index=True, choices=maluliyet_kod)
         yetki_seviyesi = field.String("Yetki Seviyesi", index=True)
         aciklama = field.String("Aciklama", index=True)
         kuruma_baslama_tarihi = field.Date("Kuruma Baslama Tarihi", index=True, format="%d.%m.%Y")
@@ -118,7 +118,7 @@ class KurumIciGorevlendirmeBilgileri(Model):
 
 
 class KurumDisiGorevlendirmeBilgileri(Model):
-    gorev_tipi = field.Integer("Görev Tipi", index=True)
+    gorev_tipi = field.Integer("Görev Tipi", index=True, choices=gorev_tipi)
     kurum_disi_gorev_baslama_tarihi = field.Date("Baslama Tarihi", index=True, format="%d.%m.%Y")
     kurum_disi_gorev_bitis_tarihi = field.Date("Bitiş Tarihi", index=True, format="%d.%m.%Y")
     aciklama = field.Text("Aciklama")
@@ -127,7 +127,7 @@ class KurumDisiGorevlendirmeBilgileri(Model):
     maas = field.Boolean("Maas")
     yevmiye = field.Boolean("Yevmiye", default=False)
     yolluk = field.Boolean("Yolluk", default=False)
-    ulke = field.Integer("Ulke", default="90")
+    ulke = field.Integer("Ulke", default="90", choices=ulke)
     personel = Personel()
 
     class Meta:
