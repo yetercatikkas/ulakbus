@@ -42,6 +42,23 @@ class CreateUser(Command):
         user_type = 'super user' if self.manager.args.super else 'user'
         print("New %s created with these permissions: \n\n%s" % (user_type, "\n".join(perm_list)))
 
+    def run(self):
+        from ulakbus.models import AbstractRole, User, Role, Permission
+        if Unit.objects.filter(name=self.manager.args.name).count():
+            print("Here are the unit information:")
+            return
+        abs_role, new = AbstractRole.objects.get_or_create(name=self.manager.args.abstract_role)
+        unit = Unit(name=self.manager.args.name, yoksıs_id=self.manager.args.yoksis_id)
+        unit.set_unit_type(self.manager.args.unit_type)
+        unit.save()
+        role = Role(unit=unit, abstract_role=abs_role).save()
+        perm_list = []
+        for perm in Permission.objects.raw(self.manager.args.permission_query):
+            role.Permissions(permission=perm)
+            perm_list.append(perm.name)
+        role.save()
+
+
 
 class LoadFixture(Command):
     CMD_NAME = 'load_fixture'
