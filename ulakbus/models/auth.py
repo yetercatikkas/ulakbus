@@ -23,7 +23,7 @@ class User(Model):
     password = field.String("Password")
     name = field.String("First Name", index=True)
     surname = field.String("Surname", index=True)
-    superuser = field.git("Super user", default=False)
+    superuser = field.String("Super user", default=False)
 
     class Meta:
         app = 'Sistem'
@@ -110,7 +110,7 @@ class Role(Model):
 
 class Unit(Model):
     name = field.String("Name", index=True)
-    yoksis_id = field.Integer("Unit ID", index=True, choices=yoksis_program_id)
+    yoksis_id = field.Integer("Unit ID", index=True, choices="yoksis_program_id")
     unit_type = field.String("Unit Type", index=True)
     parent_unit_id = field.Integer("Parent Unit ID", index=True)
     current_situation = field.String("Current Situation", index=True)
@@ -130,10 +130,10 @@ class Unit(Model):
         app = 'Sistem'
         verbose_name = "Unit"
         verbose_name_plural = "Units"
-        list_fields = ['name', 'id', 'unit_type']
         search_fields = ['name', 'id']
+        list_fields = ['name', 'id', 'unit_type']
 
-     def __unicode__(self):
+    def __unicode__(self):
         return '%s %s' % (self.name, self.id)
 
 
