@@ -7,9 +7,8 @@
 # This file is licensed under the GNU General Public License v3
 # (GPLv3).  See LICENSE.txt for details.
 
-from pyoko.model import Model, Node
-from pyoko import field
-from .auth import Unit, Role, User
+from pyoko import Model, field
+from .auth import Unit, User
 
 PERSONEL_TURU = [
     (1, 'Akademik'),
@@ -21,7 +20,7 @@ class Personel(Model):
     tckn = field.String("TC No", index=True)
     ad = field.String("Adı", index=True)
     soyad = field.String("Soyadı", index=True)
-    cinsiyet = field.String("Cinsiyet", index=True)
+    cinsiyet = field.Integer("Cinsiyet", index=True, choices='cinsiyet')
     uyruk = field.String("Uyruk", index=True)
     ikamet_adresi = field.String("İkamet Adresi", index=True)
     ikamet_il = field.String("İkamet Il", index=True)
@@ -47,7 +46,7 @@ class Personel(Model):
     engel_grubu = field.String("Engel Grubu", index=True)
     engel_derecesi = field.String("Engel Derecesi")
     engel_orani = field.Integer("Engellilik Orani")
-    personel_turu = field.Integer("Personel Türü", choices=PERSONEL_TURU)
+    personel_turu = field.Integer("Personel Türü", choices=PERSONEL_TURU, index=True)
     cuzdan_seri = field.String("Seri", index=True)
     cuzdan_seri_no = field.String("Seri No", index=True)
     baba_adi = field.String("Ana Adi", index=True)
@@ -67,7 +66,7 @@ class Personel(Model):
     kimlik_cuzdani_verilis_tarihi = field.String("Cuzdan Kayit Tarihi")
     birim = Unit("Birim")
     hizmet_sinifi = field.Integer("Hizmet Sınıfı", index=True, choices="hizmet_sinifi")
-    user = User()
+    user = User(one_to_one=True)
 
     class Meta:
         app = 'Personel'
@@ -99,6 +98,9 @@ class AdresBilgileri(Model):
     class Meta:
         verbose_name = "Adres Bilgisi"
         verbose_name_plural = "Adres Bilgileri"
+
+    def __unicode__(self):
+        return "%s %s" % (self.ad, self.il)
 
 
 class KurumIciGorevlendirmeBilgileri(Model):

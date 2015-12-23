@@ -309,7 +309,7 @@ class Ogrenci(Model):
     e_posta = field.String("E-Posta", index=True)
     tel_no = field.String("Telefon Numarası", index=True)
     kan_grubu = field.String("Kan Grubu", index=True)
-    user = User()
+    user = User(one_to_one=True)
 
     class Meta:
         app = 'Ogrenci'
@@ -337,7 +337,7 @@ class OncekiEgitimBilgisi(Model):
 
 
 class OgrenciProgram(Model):
-    ogrenci_no = field.Integer("Öğrenci Numarası", index=True)
+    ogrenci_no = field.String("Öğrenci Numarası", index=True)
     giris_tarihi = field.Date("Giriş Tarihi", index=True, format="%d.%m.%Y")
     mezuniyet_tarihi = field.Date("Mezuniyet Tarihi", index=True, format="%d.%m.%Y")
     aktif_donem = field.String("Dönem", index=True)
@@ -346,6 +346,14 @@ class OgrenciProgram(Model):
     danisman = Personel()
     program = Program()
     ogrenci = Ogrenci()
+
+    class Meta:
+        app = 'Ogrenci'
+        verbose_name = "Öğrenci Program"
+        verbose_name_plural = "Öğrenci Program"
+
+    def __unicode__(self):
+        return '%s %s - %s / %s' % (self.ogrenci.ad, self.ogrenci.soyad, self.program.adi, self.program.yil)
 
 
 class OgrenciDersi(Model):
@@ -502,15 +510,19 @@ class AkademikTakvim(Model):
 
     class Takvim(ListNode):
         etkinlik = field.Integer("Etkinlik", index=True, choices=AKADEMIK_TAKVIM_ETKINLIKLERI)
-        baslangic = field.Date("Başlangiç", index=True)
-        bitis = field.Date("Bitiş", index=True, required=False)
+        baslangic = field.Date("Başlangıç", index=True, format="%d.%m.%Y")
+        bitis = field.Date("Bitiş", index=True, format="%d.%m.%Y", required=False)
 
     class Meta:
         app = 'Ogrenci'
         verbose_name = "Akademik Takvim"
         verbose_name_plural = "Akademik Takvim"
-        list_fields = ['birim', 'yil']
-        search_fields = ['yil', 'birim']
+        list_fields = ['_birim', 'yil']
+        # search_fields = ['yil']
+
+    def _birim(self):
+        return "%s" % self.birim
+    _birim.title = 'Birim'
 
     def __unicode__(self):
         return '%s %s' % (self.birim, self.yil)

@@ -8,9 +8,14 @@
 # (GPLv3).  See LICENSE.txt for details.
 import random
 from uuid import uuid4
+
+from pyoko.conf import settings
+from pyoko.lib.utils import lazy_property, get_object_from_path
+
+from ulakbus.views.reports import ReporterRegistry
 from zengine.views.base import BaseView
 from ulakbus.models import Personel, Ogrenci
-
+from zengine.views.menu import Menu
 
 class Search(BaseView):
     def __init__(self, *args, **kwargs):
@@ -81,3 +86,47 @@ class GetCurrentUser(BaseView):
             "roles": [{"role": role.__unicode__()} for role in userObject.role_set]
         }
         self.output['current_user'] = currentUser
+
+class UlakbusMenu(Menu):
+    def __init__(self, current):
+        super(UlakbusMenu, self).__init__(current)
+        self.add_reporters()
+        self.add_user_data()
+        self.add_settings()
+
+    def add_settings(self):
+        self.output['settings'] = {
+            'static_url': settings.S3_PUBLIC_URL,
+        }
+
+    def add_user_data(self):
+        # add data of current logged in user
+        usr = self.current.user
+        role = self.current.role
+        self.output['current_user'] = {
+            "name": usr.name,
+            "surname": usr.surname,
+            "username": usr.username,
+            "role": self.current.role.abstract_role.name,
+            "avatar": usr.get_avatar_url(),
+            "is_staff": role.is_staff,
+            "is_student": role.is_student,
+            "roles": [{"role": roleset.role.__unicode__()} for roleset in self.current.user.role_set]
+        }
+        if role.is_student:
+            # insert student specific data here
+            self.output['current_user'].update({
+            })
+
+        elif role.is_staff:
+            # insert staff specific data here
+            self.output['current_user'].update({
+            })
+
+    def add_reporters(self):
+        for mdl in ReporterRegistry.get_reporters():
+            perm = "report.%s" % mdl['model']
+            if self.current.has_permission(perm):
+                self.output['other'].append(mdl)
+
+

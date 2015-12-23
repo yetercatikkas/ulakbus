@@ -75,17 +75,19 @@ class TestCase(Settings):
         self.driver.find_element_by_css_selector(
             'bootstrap-decorator.ng-scope:nth-child(23) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > span:nth-child(1) > button:nth-child(1)').click()
         # Personellerin yuklenmesini bekliyor.
-        WebDriverWait(self.driver, 5).until(
+        WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.CSS_SELECTOR, '.open > ul:nth-child(2) > li:nth-child(2) > a:nth-child(1)')))
         self.driver.find_element_by_css_selector('.open > ul:nth-child(2) > li:nth-child(2) > a:nth-child(1)').click()
         # Donem seciyor.
         self.driver.find_element_by_css_selector('.open > button:nth-child(1)').click()
-        # Donemlerin yuklnemesini bekliyor.
+        # Donemlerin yuklenemesini bekliyor.
         WebDriverWait(self.driver, 5).until(
             EC.element_to_be_clickable((By.CSS_SELECTOR, '.open > ul:nth-child(2) > li:nth-child(1) > a:nth-child(1)')))
         self.driver.find_element_by_css_selector('.open > ul:nth-child(2) > li:nth-child(1) > a:nth-child(1)').click()
         # Kaydet'e tikliyor.
         self.driver.find_element_by_css_selector('button.btn-danger:nth-child(1)').click()
+        # !!!!!!!!!!! Formu iki kere dolduruyor.
+
 
 
 
