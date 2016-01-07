@@ -4,14 +4,12 @@ from pyoko.exceptions import MultipleObjectsReturned
 from pyoko.model import super_context
 from ulakbus.models import User, AbstractRole, Role, Permission
 from zengine.lib.test_utils import BaseTestCase as ZengineBaseTestCase, user_pass
-
 import sys
 
 sys.TEST_MODELS_RESET = False
 
+
 class BaseTestCase(ZengineBaseTestCase):
-
-
     @staticmethod
     def cleanup():
         if not sys.TEST_MODELS_RESET:
@@ -24,11 +22,11 @@ class BaseTestCase(ZengineBaseTestCase):
     def create_user(cls):
         # FIXME: To prevent existence of test_user in production,
         # this should be depend on an env. flag
-        cls.cleanup()
+        # cls.cleanup()
 
         abs_role, new = AbstractRole(super_context).objects.get_or_create(id=1, name='W.C. Hero')
         cls.client.user, new = User(super_context).objects.get_or_create({"password": user_pass},
-                                                           username='test_user')
+                                                                         username='test_user')
         cls.client.user.superuser = True
         cls.client.user.save()
 
@@ -42,4 +40,3 @@ class BaseTestCase(ZengineBaseTestCase):
             sleep(1)
             # pyoko dose not update the user instance
             cls.client.user = User(super_context).objects.get(cls.client.user.key)
-
